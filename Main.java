@@ -28,6 +28,17 @@ class Gauss {
         // TODO: implementar este metodo.
     }
 
+    private void multiplicaLinha(int i, double k){
+        double[] linha = m[i].clone();
+        for(int c = 0; c < linha.length; c++) {
+            linha[c] = linha[c] * k;
+        }
+
+        m[i] = linha;
+
+        // TODO: implementar este metodo.
+    }
+
     private void combinaLinhas(int i1, int i2, double k){
         double[] d1, d2;
 
@@ -94,8 +105,22 @@ class Gauss {
             for (int k = i+1; k < m.length; k++) {
                 double factor = m[k][i] / m[i][i];
 
+                //if(factor < (SMALL* -1)) factor = Math.abs(factor);
+
                 combinaLinhas(k, i, factor*-1);
+
+
             }
+        }
+
+        for (int i = 0; i < m.length; i++){
+            int j;
+
+            for (j = i; j < m[i].length; j++)
+                if(m[i][j] != 0){ multiplicaLinha(i, 1/m[i][j]); break; }
+
+
+            for(j = 0; j < m[i].length; j++) if(Math.abs(m[i][j]) < SMALL) m[i][j] = 0.0;
         }
 
 
@@ -111,7 +136,7 @@ public class Main {
 
         double[][] matriz = new double[][]{{4.0, 1.0, 2.5, 2.0, 1.0},
                 {9.0, 1.0, 2.0, 7.0, 3.5},
-                {6.5, 5.0, 1.0, 0.0, 3.5},
+                {-6.5, 5.0, 1.0, 0.0, 3.5},
                 {0.0, 0.0, 1.0, 2.0, 3.0},
                 {6.0, 1.0, 1.0, 2.5, 3.5}};
 

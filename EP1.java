@@ -184,7 +184,19 @@ class Matriz {
 				double factor = m[k][i] / m[i][i];
 
 				combinaLinhas(k, i, factor*-1);
+
+
 			}
+		}
+
+		for (int i = 0; i < m.length; i++){
+			int j;
+
+			for (j = i; j < m[i].length; j++)
+				if(m[i][j] != 0){ multiplicaLinha(i, 1/m[i][j]); break; }
+
+
+			for(j = 0; j < m[i].length; j++) if(Math.abs(m[i][j]) < SMALL) m[i][j] = 0.0;
 		}
 
 
