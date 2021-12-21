@@ -176,8 +176,11 @@ class Matriz {
 				if (Math.abs(m[j][i]) < SMALL) {
 					int[] coor = encontraLinhaPivo(j);
 
-					if (Math.abs(m[j][i]) < Math.abs(m[coor[0]][coor[1]]))
+					if (Math.abs(m[j][i]) < Math.abs(m[coor[0]][coor[1]])) {
 						trocaLinha(j, coor[0]);
+						agregada.trocaLinha(j, coor[0]);
+
+					}
 				}
 
 
@@ -187,6 +190,7 @@ class Matriz {
 				//if(factor < (SMALL* -1)) factor = Math.abs(factor);
 
 				combinaLinhas(k, i, factor * -1);
+				agregada.combinaLinhas(k, i, factor * -1);
 
 
 			}
@@ -198,6 +202,7 @@ class Matriz {
 			for (j = i; j < m[i].length; j++)
 				if (m[i][j] != 0) {
 					multiplicaLinha(i, 1 / m[i][j]);
+					agregada.multiplicaLinha(i, 1 / m[i][j]);
 					break;
 				}
 
@@ -237,7 +242,7 @@ class Matriz {
 				//if(factor < (SMALL* -1)) factor = Math.abs(factor);
 
 				combinaLinhas(i-1, i, factor * -1);
-
+				agregada.combinaLinhas(i-1, i, factor * -1);
 
 			}
 		}
