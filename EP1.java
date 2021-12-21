@@ -180,6 +180,7 @@ class Matriz {
 					if (Math.abs(m[j][i]) < Math.abs(m[coor[0]][coor[1]])) {
 						trocaLinha(j, coor[0]);
 						agregada.trocaLinha(j, coor[0]);
+						det = det*-1;
 
 					}
 				}

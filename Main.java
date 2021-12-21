@@ -89,8 +89,10 @@ class Gauss {
 // tambem deve calcular e devolver o determinante da matriz que invoca o metodo. Assumimos
 // que a matriz que invoca este metodo eh uma matriz quadrada.
 
-    public void formaEscalonada() {
+    public double formaEscalonada(Gauss agregada){
         double det = 1.0;
+
+
         //metodo que coloca 0 na coluna x abaixo de inteiros maiores que 0
         for (int i = 0; i < m.length; i++) {
 
@@ -100,8 +102,12 @@ class Gauss {
                 if (Math.abs(m[j][i]) < SMALL) {
                     int[] coor = encontraLinhaPivo(j);
 
-                    if (Math.abs(m[j][i]) < Math.abs(m[coor[0]][coor[1]]))
+                    if (Math.abs(m[j][i]) < Math.abs(m[coor[0]][coor[1]])) {
                         trocaLinha(j, coor[0]);
+                        agregada.trocaLinha(j, coor[0]);
+                        det = det*-1;
+
+                    }
                 }
 
 
@@ -111,6 +117,7 @@ class Gauss {
                 //if(factor < (SMALL* -1)) factor = Math.abs(factor);
 
                 combinaLinhas(k, i, factor * -1);
+                agregada.combinaLinhas(k, i, factor * -1);
 
             }
         }
@@ -124,25 +131,33 @@ class Gauss {
             for (j = i; j < m[i].length; j++)
                 if (m[i][j] != 0) {
                     multiplicaLinha(i, 1 / m[i][j]);
+                    agregada.multiplicaLinha(i, 1 / m[i][j]);
                     break;
                 }
 
 
             for (j = 0; j < m[i].length; j++) if (Math.abs(m[i][j]) < SMALL) m[i][j] = 0.0;
             for (j = 0; j < m[i].length; j++) if(Math.abs(Math.ceil(m[i][j]) % m[i][j]) < SMALL &&
-                                                 Math.abs(Math.ceil(m[i][j]) - m[i][j]) < SMALL) m[i][j] = Math.ceil(m[i][j]);
+                    Math.abs(Math.ceil(m[i][j]) - m[i][j]) < SMALL) m[i][j] = Math.ceil(m[i][j]);
 
             for (j = 0; j < m[i].length; j++) if (Math.abs(m[i][j]) < SMALL) m[i][j] = 0.0;
 
         }
 
 
-        return;
+        // TODO: implementar este metodo.
+
+        return det;
     }
 
-    public void formaEscalonadaReduzida() {
+    // metodo que implementa a eliminacao de Gauss-Jordan, que coloca a matriz (que chama o metodo)
+    // na forma escalonada reduzida. As operacoes realizadas para colocar a matriz na forma escalonada
+    // reduzida tambem devem ser aplicadas na matriz "agregada" caso esta seja nao nula. Assumimos que
+    // a matriz que invoca esta metodo eh uma matriz quadrada. Não se pode assumir, contudo, que esta
+    // matriz ja esteja na forma escalonada (mas voce pode usar o metodo acima para isso).
 
-        formaEscalonada();
+    public void formaEscalonadaReduzida(Gauss agregada){
+        formaEscalonada(agregada);
 
 
         for(int i = m.length - 1; i > 0; i--){
@@ -156,13 +171,12 @@ class Gauss {
                 //if(factor < (SMALL* -1)) factor = Math.abs(factor);
 
                 combinaLinhas(i-1, i, factor * -1);
-
+                agregada.combinaLinhas(i-1, i, factor * -1);
 
             }
         }
 
         return;
-
 
         // TODO: implementar este metodo.
     }
@@ -181,7 +195,10 @@ public class Main {
                 {0.0, 0.0, 1.0, 2.0, 3.0},
                 {6.0, 1.0, 1.0, 2.5, 3.5}};
 
+        double[] agg = new double[]{3, 5, 6, 7, 9};
+
         Gauss gg = new Gauss(5, 5);
+        Gauss agregada = new Gauss(5,1);
 
 
         for (int i = 0; i < 5; i++) {
@@ -191,8 +208,11 @@ public class Main {
 
             }
         }
+        int i = 0;
+        for(double d : agg){ agregada.set(i, 0, agg[i]); i++; }
 
-        gg.formaEscalonadaReduzida();
+        double dd = gg.formaEscalonada(agregada);
+        //gg.formaEscalonadaReduzida(agregada);
 
 
         return;
