@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 class Gauss {
 
     public static final double SMALL = 0.000001;
@@ -28,9 +30,9 @@ class Gauss {
         // TODO: implementar este metodo.
     }
 
-    private void multiplicaLinha(int i, double k){
+    private void multiplicaLinha(int i, double k) {
         double[] linha = m[i].clone();
-        for(int c = 0; c < linha.length; c++) {
+        for (int c = 0; c < linha.length; c++) {
             linha[c] = linha[c] * k;
         }
 
@@ -39,16 +41,17 @@ class Gauss {
         // TODO: implementar este metodo.
     }
 
-    private void combinaLinhas(int i1, int i2, double k){
+    private void combinaLinhas(int i1, int i2, double k) {
         double[] d1, d2;
 
-        d1 = m[i1].clone(); d2 = m[i2].clone();
+        d1 = m[i1].clone();
+        d2 = m[i2].clone();
 
-        for(int c = 0; c < d2.length; c++) {
+        for (int c = 0; c < d2.length; c++) {
             d2[c] = d2[c] * k;
         }
 
-        for(int c = 0; c < d1.length; c++){
+        for (int c = 0; c < d1.length; c++) {
             d1[c] = d1[c] + d2[c];
         }
 
@@ -102,32 +105,68 @@ class Gauss {
                 }
 
 
-            for (int k = i+1; k < m.length; k++) {
+            for (int k = i + 1; k < m.length; k++) {
                 double factor = m[k][i] / m[i][i];
 
                 //if(factor < (SMALL* -1)) factor = Math.abs(factor);
 
-                combinaLinhas(k, i, factor*-1);
+                combinaLinhas(k, i, factor * -1);
 
 
             }
         }
 
-        for (int i = 0; i < m.length; i++){
+        for (int i = 0; i < m.length; i++) {
             int j;
 
             for (j = i; j < m[i].length; j++)
-                if(m[i][j] != 0){ multiplicaLinha(i, 1/m[i][j]); break; }
+                if (m[i][j] != 0) {
+                    multiplicaLinha(i, 1 / m[i][j]);
+                    break;
+                }
 
 
-            for(j = 0; j < m[i].length; j++) if(Math.abs(m[i][j]) < SMALL) m[i][j] = 0.0;
+            for (j = 0; j < m[i].length; j++) if (Math.abs(m[i][j]) < SMALL) m[i][j] = 0.0;
+            for (j = 0; j < m[i].length; j++) if(Math.abs(Math.ceil(m[i][j]) % m[i][j]) < SMALL &&
+                                                 Math.abs(Math.ceil(m[i][j]) - m[i][j]) < SMALL) m[i][j] = Math.ceil(m[i][j]);
+
+            for (j = 0; j < m[i].length; j++) if (Math.abs(m[i][j]) < SMALL) m[i][j] = 0.0;
+
         }
 
 
         return;
     }
 
+    public void formaEscalonadaReduzida() {
+
+        formaEscalonada();
+
+
+        for(int i = m.length - 1; i > 0; i--){
+
+            for (int k = m.length -1; k >= i && k >0; k--) {
+                double factor;
+                if((m[i][k] > SMALL || m[i][k] < SMALL*-1) && (m[i-1][k] > SMALL || m[i-1][k] < SMALL*-1))
+                    factor = m[i-1][k] / m[i][k];
+                else continue;
+
+                //if(factor < (SMALL* -1)) factor = Math.abs(factor);
+
+                combinaLinhas(i-1, i, factor * -1);
+
+
+            }
+        }
+
+        return;
+
+
+        // TODO: implementar este metodo.
+    }
+
 }
+
 
 
 public class Main {
@@ -151,7 +190,7 @@ public class Main {
             }
         }
 
-        gg.formaEscalonada();
+        gg.formaEscalonadaReduzida();
 
 
         return;
@@ -159,3 +198,4 @@ public class Main {
     }
 
 }
+

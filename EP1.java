@@ -166,6 +166,7 @@ class Matriz {
 
 	public double formaEscalonada(Matriz agregada){
 
+
 		//metodo que coloca 0 na coluna x abaixo de inteiros maiores que 0
 		for (int i = 0; i < m.length; i++) {
 
@@ -180,23 +181,33 @@ class Matriz {
 				}
 
 
-			for (int k = i+1; k < m.length; k++) {
+			for (int k = i + 1; k < m.length; k++) {
 				double factor = m[k][i] / m[i][i];
 
-				combinaLinhas(k, i, factor*-1);
+				//if(factor < (SMALL* -1)) factor = Math.abs(factor);
+
+				combinaLinhas(k, i, factor * -1);
 
 
 			}
 		}
 
-		for (int i = 0; i < m.length; i++){
+		for (int i = 0; i < m.length; i++) {
 			int j;
 
 			for (j = i; j < m[i].length; j++)
-				if(m[i][j] != 0){ multiplicaLinha(i, 1/m[i][j]); break; }
+				if (m[i][j] != 0) {
+					multiplicaLinha(i, 1 / m[i][j]);
+					break;
+				}
 
 
-			for(j = 0; j < m[i].length; j++) if(Math.abs(m[i][j]) < SMALL) m[i][j] = 0.0;
+			for (j = 0; j < m[i].length; j++) if (Math.abs(m[i][j]) < SMALL) m[i][j] = 0.0;
+			for (j = 0; j < m[i].length; j++) if(Math.abs(Math.ceil(m[i][j]) % m[i][j]) < SMALL &&
+					Math.abs(Math.ceil(m[i][j]) - m[i][j]) < SMALL) m[i][j] = Math.ceil(m[i][j]);
+
+			for (j = 0; j < m[i].length; j++) if (Math.abs(m[i][j]) < SMALL) m[i][j] = 0.0;
+
 		}
 
 
@@ -212,6 +223,26 @@ class Matriz {
 	// matriz ja esteja na forma escalonada (mas voce pode usar o metodo acima para isso).
 
 	public void formaEscalonadaReduzida(Matriz agregada){
+		formaEscalonada(agregada);
+
+
+		for(int i = m.length - 1; i > 0; i--){
+
+			for (int k = m.length -1; k >= i && k >0; k--) {
+				double factor;
+				if((m[i][k] > SMALL || m[i][k] < SMALL*-1) && (m[i-1][k] > SMALL || m[i-1][k] < SMALL*-1))
+					factor = m[i-1][k] / m[i][k];
+				else continue;
+
+				//if(factor < (SMALL* -1)) factor = Math.abs(factor);
+
+				combinaLinhas(i-1, i, factor * -1);
+
+
+			}
+		}
+
+		return;
 
 		// TODO: implementar este metodo.		
 	}
