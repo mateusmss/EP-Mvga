@@ -165,6 +165,7 @@ class Matriz {
 	// que a matriz que invoca este metodo eh uma matriz quadrada.
 
 	public double formaEscalonada(Matriz agregada){
+		double det = 1.0;
 
 
 		//metodo que coloca 0 na coluna x abaixo de inteiros maiores que 0
@@ -192,11 +193,13 @@ class Matriz {
 				combinaLinhas(k, i, factor * -1);
 				agregada.combinaLinhas(k, i, factor * -1);
 
-
 			}
 		}
 
 		for (int i = 0; i < m.length; i++) {
+			if (Math.abs(m[i][i]) > SMALL)
+				det = det * m[i][i];
+
 			int j;
 
 			for (j = i; j < m[i].length; j++)
@@ -218,7 +221,7 @@ class Matriz {
 
 		// TODO: implementar este metodo.
 
-		return 0.0;
+		return det;
 	}
 
 	// metodo que implementa a eliminacao de Gauss-Jordan, que coloca a matriz (que chama o metodo)

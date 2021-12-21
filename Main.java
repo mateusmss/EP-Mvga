@@ -90,7 +90,7 @@ class Gauss {
 // que a matriz que invoca este metodo eh uma matriz quadrada.
 
     public void formaEscalonada() {
-
+        double det = 1.0;
         //metodo que coloca 0 na coluna x abaixo de inteiros maiores que 0
         for (int i = 0; i < m.length; i++) {
 
@@ -112,11 +112,13 @@ class Gauss {
 
                 combinaLinhas(k, i, factor * -1);
 
-
             }
         }
 
         for (int i = 0; i < m.length; i++) {
+            if (Math.abs(m[i][i]) > SMALL)
+                det = det * m[i][i];
+
             int j;
 
             for (j = i; j < m[i].length; j++)
