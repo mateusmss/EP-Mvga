@@ -177,7 +177,7 @@ class Matriz {
 	// que a matriz que invoca este metodo eh uma matriz quadrada.
 
 	public double formaEscalonada(Matriz agregada){
-		double det = 1.0;
+		double det = -1.0;
 		//imprime(agregada);
 		//double unit = 1.0;
 
@@ -191,8 +191,10 @@ class Matriz {
 					int[] coor = encontraLinhaPivo(j);
 					try {
 						if (Math.abs(m[j][i]) < Math.abs(m[coor[0]][coor[1]])) {
+
 							trocaLinha(j, coor[0]);
 							agregada.trocaLinha(j, coor[0]);
+
 
 							det = det * -1;
 
@@ -348,7 +350,7 @@ public class EP1 {
 
 			double retorno = matrix.formaEscalonada(agregada);
 
-			System.out.println(retorno);
+			System.out.printf("%7.2f \n", retorno);
 
 		}
 		else {
