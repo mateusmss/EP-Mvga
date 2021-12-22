@@ -12,6 +12,7 @@ class Matriz {
 
 	private int lin, col;
 	private double [][] m;
+	private boolean isInversa = false;
 
 	// metodo estatico que cria uma matriz identidade de tamanho n x n.
 
@@ -22,6 +23,7 @@ class Matriz {
 		return mat;
 	}
 
+	public void setInversa(){ isInversa = true; }
 	// construtor que cria uma matriz de n linhas por m colunas com todas as entradas iguais a zero.
 
 	public Matriz(int n, int m){
@@ -180,8 +182,6 @@ class Matriz {
 				if (Math.abs(m[j][i]) < SMALL) {
 					int[] coor = encontraLinhaPivo(j);
 					try {
-
-
 						if (Math.abs(m[j][i]) < Math.abs(m[coor[0]][coor[1]])) {
 							trocaLinha(j, coor[0]);
 							agregada.trocaLinha(j, coor[0]);
@@ -252,8 +252,11 @@ class Matriz {
 		for(int k = 0; k < m[m.length-1].length; k++){
 			d = d + m[m.length-1][k];
 		}
-		if(Math.abs(d) < SMALL){
+		if(Math.abs(d) < SMALL && !isInversa){
 			System.out.println("sistema sem solução");
+			System.exit(0);
+		}else if(Math.abs(d) < SMALL && isInversa){
+			System.out.println("matriz singular");
 			System.exit(0);
 		}
 
@@ -303,7 +306,7 @@ public class EP1 {
 
 			matrix.formaEscalonadaReduzida(agregada);
 
-			matrix.imprime();
+			//matrix.imprime();
 			agregada.imprime();
 		}
 		else if("inverte".equals(operacao)){
@@ -315,6 +318,7 @@ public class EP1 {
 					matrix.set(i, j, in.nextInt());
 			}
 
+			matrix.setInversa();
 			matrix.formaEscalonadaReduzida(agregada);
 			agregada.imprime();
 
