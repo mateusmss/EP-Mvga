@@ -153,6 +153,8 @@ class Matriz {
 				pivo_lin = i;
 				pivo_col = j;
 			}
+
+			//System.out.println("Pivot: linha-> "+pivo_lin+" | coluna->"+pivo_col);
 		}
 
 		return new int [] { pivo_lin, pivo_col };
@@ -166,7 +168,8 @@ class Matriz {
 
 	public double formaEscalonada(Matriz agregada){
 		double det = 1.0;
-
+		//imprime(agregada);
+		//double unit = 1.0;
 
 		//metodo que coloca 0 na coluna x abaixo de inteiros maiores que 0
 		for (int i = 0; i < m.length; i++) {
@@ -176,26 +179,34 @@ class Matriz {
 			for (j = i; j < m[i].length; j++)
 				if (Math.abs(m[j][i]) < SMALL) {
 					int[] coor = encontraLinhaPivo(j);
+					try {
 
-					if (Math.abs(m[j][i]) < Math.abs(m[coor[0]][coor[1]])) {
-						trocaLinha(j, coor[0]);
-						agregada.trocaLinha(j, coor[0]);
-						det = det*-1;
 
-					}
+						if (Math.abs(m[j][i]) < Math.abs(m[coor[0]][coor[1]])) {
+							trocaLinha(j, coor[0]);
+							agregada.trocaLinha(j, coor[0]);
+
+							det = det * -1;
+
+						}
+					}catch (ArrayIndexOutOfBoundsException e){ continue; }
+
 				}
 
 
 			for (int k = i + 1; k < m.length; k++) {
-				double factor = m[k][i] / m[i][i];
+				double factor = -1;
 
 				//if(factor < (SMALL* -1)) factor = Math.abs(factor);
+				if(Math.abs(m[i][i]) > SMALL) factor = m[k][i] / m[i][i];
 
 				combinaLinhas(k, i, factor * -1);
 				agregada.combinaLinhas(k, i, factor * -1);
 
 			}
 		}
+
+		//imprime(agregada);
 
 		for (int i = 0; i < m.length; i++) {
 			if (Math.abs(m[i][i]) > SMALL)
@@ -204,29 +215,28 @@ class Matriz {
 			int j;
 
 			for (j = i; j < m[i].length; j++)
-				if (m[i][j] != 0) {
-					multiplicaLinha(i, 1 / m[i][j]);
-					agregada.multiplicaLinha(i, 1 / m[i][j]);
+				if (Math.abs(m[i][j]) > SMALL) {
+					double factor = (1.0/m[i][j]);
+					multiplicaLinha(i, factor);
+					agregada.multiplicaLinha(i, factor);
 					break;
 				}
 
 
 			for (j = 0; j < m[i].length; j++) if (Math.abs(m[i][j]) < SMALL) m[i][j] = 0.0;
-			/*for (j = 0; j < m[i].length; j++) if(Math.abs(Math.ceil(m[i][j]) % m[i][j]) < SMALL &&
-					Math.abs(Math.ceil(m[i][j]) - m[i][j]) < SMALL) m[i][j] = Math.ceil(m[i][j]);
-
-			for (j = 0; j < m[i].length; j++) if (Math.abs(m[i][j]) < SMALL) m[i][j] = 0.0;*/
 
 		}
-
 
 		// TODO: implementar este metodo.
 
-
-		if(Math.abs(det) <= SMALL){
-			System.out.println("sistema possui diversas soluções");
-			System.exit(0);
+		//imprime(agregada);
+		double d = 0;
+		for(int k = 0; k < m[m.length-1].length; k++){
+			d = d + m[m.length-1][k];
 		}
+
+		if(Math.abs(d) < SMALL)
+			return 0.0;
 		return det;
 	}
 
@@ -236,26 +246,30 @@ class Matriz {
 	// a matriz que invoca esta metodo eh uma matriz quadrada. Não se pode assumir, contudo, que esta
 	// matriz ja esteja na forma escalonada (mas voce pode usar o metodo acima para isso).
 
-	public void formaEscalonadaReduzida(Matriz agregada){
-		formaEscalonada(agregada);
-
+	public void formaEscalonadaReduzida(Matriz agregada){ //concertar
+		double det = formaEscalonada(agregada);
+		double d = 0;
+		for(int k = 0; k < m[m.length-1].length; k++){
+			d = d + m[m.length-1][k];
+		}
+		if(Math.abs(d) < SMALL){
+			System.out.println("sistema sem solução");
+			System.exit(0);
+		}
 
 		for(int i = m.length - 1; i > 0; i--){
 
-			for (int k = m.length -1; k >= i && k >0; k--) {
-				double factor;
-				if((m[i][k] > SMALL || m[i][k] < SMALL*-1) && (m[i-1][k] > SMALL || m[i-1][k] < SMALL*-1))
-					factor = m[i-1][k] / m[i][k];
-				else continue;
+			for (int k = i-1; k >=0; k--) {
+				double factor = -1;
 
-				//if(factor < (SMALL* -1)) factor = Math.abs(factor);
+				if(Math.abs(m[i][i]) > SMALL) factor = m[k][i] / m[i][i];
 
-				combinaLinhas(i-1, i, factor * -1);
-				agregada.combinaLinhas(i-1, i, factor * -1);
+				combinaLinhas(k, i, factor * -1);
+				agregada.combinaLinhas(k, i, factor * -1);
 
 			}
 		}
-
+		//imprime(agregada);
 		return;
 
 		// TODO: implementar este metodo.		
