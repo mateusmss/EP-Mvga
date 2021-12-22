@@ -212,16 +212,21 @@ class Matriz {
 
 
 			for (j = 0; j < m[i].length; j++) if (Math.abs(m[i][j]) < SMALL) m[i][j] = 0.0;
-			for (j = 0; j < m[i].length; j++) if(Math.abs(Math.ceil(m[i][j]) % m[i][j]) < SMALL &&
+			/*for (j = 0; j < m[i].length; j++) if(Math.abs(Math.ceil(m[i][j]) % m[i][j]) < SMALL &&
 					Math.abs(Math.ceil(m[i][j]) - m[i][j]) < SMALL) m[i][j] = Math.ceil(m[i][j]);
 
-			for (j = 0; j < m[i].length; j++) if (Math.abs(m[i][j]) < SMALL) m[i][j] = 0.0;
+			for (j = 0; j < m[i].length; j++) if (Math.abs(m[i][j]) < SMALL) m[i][j] = 0.0;*/
 
 		}
 
 
 		// TODO: implementar este metodo.
 
+
+		if(Math.abs(det) <= SMALL){
+			System.out.println("sistema possui diversas soluções");
+			System.exit(0);
+		}
 		return det;
 	}
 
@@ -272,12 +277,49 @@ public class EP1 {
 		// TODO: completar este metodo.
 
 		if("resolve".equals(operacao)){
+			Matriz agregada = new Matriz(n, 1);
+			Matriz matrix = new Matriz(n, n);
 
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < n; j++)
+					matrix.set(i, j, in.nextInt());
+				agregada.set(i, 0, in.nextInt());
+
+			}
+
+			matrix.formaEscalonadaReduzida(agregada);
+
+			matrix.imprime();
+			agregada.imprime();
 		}
 		else if("inverte".equals(operacao)){
+			Matriz matrix = new Matriz(n, n);
+			Matriz agregada = Matriz.identidade(n);
+
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < n; j++)
+					matrix.set(i, j, in.nextInt());
+			}
+
+			matrix.formaEscalonadaReduzida(agregada);
+			agregada.imprime();
 
 		}
 		else if("determinante".equals(operacao)){
+			Matriz agregada = Matriz.identidade(n);
+			Matriz matrix = new Matriz(n, n);
+
+			//int h = 0;
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < n; j++)
+					matrix.set(i, j, in.nextInt());
+				//agregada.set(h, 0, in.nextInt());
+
+			}
+
+			double retorno = matrix.formaEscalonada(agregada);
+
+			System.out.println(retorno);
 
 		}
 		else {
