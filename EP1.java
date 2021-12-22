@@ -1,3 +1,11 @@
+/*
+	Integrantes da dupla:
+	
+	Gregório Assagra de Almeida Filho	10856824
+	Mateus Saldanha				10882873
+	
+*/
+
 import java.util.*;
 
 // classe que representa uma matriz de valores do tipo double.
@@ -209,13 +217,13 @@ class Matriz {
 		//imprime(agregada);
 
 		for (int i = 0; i < m.length; i++) {
-			if (Math.abs(m[i][i]) > SMALL)
-				det = det * m[i][i];
+
 
 			int j;
 
 			for (j = i; j < m[i].length; j++)
 				if (Math.abs(m[i][j]) > SMALL) {
+					det = det * (m[i][j]);
 					double factor = (1.0/m[i][j]);
 					multiplicaLinha(i, factor);
 					agregada.multiplicaLinha(i, factor);
@@ -252,8 +260,11 @@ class Matriz {
 		for(int k = 0; k < m[m.length-1].length; k++){
 			d = d + m[m.length-1][k];
 		}
-		if(Math.abs(d) < SMALL && !isInversa){
+		if(Math.abs(d) < SMALL && !isInversa && agregada.get(m.length -1, 0) != 0){
 			System.out.println("sistema sem solução");
+			System.exit(0);
+		}else if(Math.abs(d) < SMALL && !isInversa && agregada.get(m.length -1, 0) == 0){
+			System.out.println("sistema possui diversas soluções");
 			System.exit(0);
 		}else if(Math.abs(d) < SMALL && isInversa){
 			System.out.println("matriz singular");
